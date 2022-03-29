@@ -4,9 +4,13 @@
 </head>
 <body>
 
+<div id="instrument"></div>
+
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.68/Tone.js"></script>
 <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/nexusui@2.1.5/dist/NexusUI.min.js"></script>
 <script type="text/javascript" src="../tune-master/tune.js"></script>
 <script type="module">
   // set up tune for alt scales
@@ -16,9 +20,21 @@
 
   // alias tune.note for shorter access
   const tn = tune.note.bind(tune);
-  
+
+  const createUi = () => {
+    const dial = Nexus.Add.Dial("#instrument", { size: [100, 100]});
+    const slider = Nexus.Add.Slider("#instrument", { size: [25, 100]});
+    const position = Nexus.Add.Position("#instrument", {size: [200,200]});
+
+    dial.on("change", v => console.log(v));
+    slider.on("change", v => console.log(v));
+  };
   
   const play = async () => {
+    debugger;
+
+
+
     // synths
     const synthA = new Tone.FMSynth();
     const synthB = new Tone.AMSynth();
@@ -76,6 +92,7 @@
     Tone.Transport.bpm.rampTo(80, 10);
   };
 
+  createUi();
   StartAudioContext(Tone.context).then(play);
 </script>
 </body>
