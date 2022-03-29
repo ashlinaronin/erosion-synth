@@ -1,0 +1,82 @@
+<html>
+<head>
+  <title>erosion-synth</title>
+</head>
+<body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.68/Tone.js"></script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"></script>
+<script type="text/javascript" src="../tune-master/tune.js"></script>
+<script type="module">
+  // set up tune for alt scales
+  const tune = new Tune();
+  tune.loadScale("mean19");
+  tune.tonicize(220);
+
+  // alias tune.note for shorter access
+  const tn = tune.note.bind(tune);
+  
+  
+  const play = async () => {
+    // synths
+    const synthA = new Tone.FMSynth();
+    const synthB = new Tone.AMSynth();
+    const synthC = new Tone.PolySynth(Tone.Synth);
+    const pulse = new Tone.PulseOscillator();
+
+    const pitchLfo = new Tone.LFO(1, tn(3, 2), tn(7, 2)).start();
+
+    // fx
+    const distortion = new Tone.Distortion(0.4);
+    const chorus = new Tone.Chorus(4, 2.5, 0.5);
+    const delay = new Tone.Delay(0.1).toDestination();
+
+    // inputs to synths
+    pitchLfo.connect(synthB.frequency);
+
+    // synths to fx
+    synthA.connect(distortion);
+    synthB.connect(distortion);
+    pulse.connect(delay);
+
+    // inter-fx connex
+    distortion.connect(chorus);
+
+    // fx to destination
+    delay.toDestination();
+    chorus.toDestination();
+    synthC.toDestination();
+
+    // sequencing
+    const loopA = new Tone.Loop(time => synthA.triggerAttackRelease(tn(3, 2), "8n", time), "4n").start(0).stop("3m");
+    const loopB = new Tone.Loop(time => synthB.triggerAttackRelease(tn(4, 1), "8n", time), "4n").start("8n").stop("4m");
+    const loopC = new Tone.Loop(time => synthC.triggerAttackRelease(tn(5, 1), "16n", time), "4n").start("16n").stop("2m");
+
+    Tone.Transport.scheduleRepeat(time => pulse.start(time).stop(time + 0.01), "8n", "8n", "2m");
+
+    const seq = new Tone.Sequence((time, note) => {
+      synthB.triggerAttackRelease(note, 0.1, time);
+    }, [tn(2), [tn(3), tn(4), tn(5)], tn(7), [tn(6), tn(5)]]);
+    Tone.Transport.scheduleRepeat(time => seq.start(time).stop(time + 0.1), "16n", "4m");
+
+    const chordEvent = new Tone.ToneEvent(((time, chord) => {
+      synthC.triggerAttackRelease(chord, 0.5, time);
+    }), [tn(4), tn(6), tn(8)]);
+    chordEvent.start();
+    chordEvent.loop = 4;
+    chordEvent.loopEnd = "1m";
+
+
+    // the loops start when the Transport is started
+    Tone.Transport.start();
+
+    // ramp up to 800 bpm over 10 seconds
+    Tone.Transport.bpm.rampTo(800, 10);
+    Tone.Transport.bpm.rampTo(80, 10);
+  };
+
+  StartAudioContext(Tone.context).then(play);
+</script>
+</body>
+</html>
