@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>erosion-synth prompts</title>
+  </head>
+  <body>
+    <main>
+      <h1>prompt</h1>
+      <h2 id="prompt-header"></h2>
+      <p id="prompt-text">click button to select a prompt</p>
+    </main>
+    <aside>
+      <button type="button" onClick="showRandomPrompt()">choose prompt</button>
+    </aside>
+
+    <script>
+      const prompts = [
+        {
+          type: "rock",
+          speed: "fast",
+          text:
+            "You are a chunk of rock that suddenly falls off the side of the cliff. Wait for a moment that feels right, then play a crescendo of increasingly chaotic noise as the rock's fall accelerates.",
+        },
+        {
+          type: "rock",
+          speed: "slow",
+          text:
+            "You are a layer of sedimentary rock. Choose a location in the image, then play slow sustained bass tones corresponding to each layer below it, rising slowly until you reach the point you have chosen, then stop.",
+        },
+      ];
+
+      const getRandomPrompt = () =>
+        prompts[Math.floor(Math.random() * prompts.length)];
+
+      const showRandomPrompt = () => {
+        const prompt = getRandomPrompt();
+        document.getElementById("prompt-header").innerText = `${prompt.type} (${prompt.speed})`;
+        document.getElementById("prompt-text").innerText = prompt.text;
+      };
+
+      // 1st stage. button, that, when clicked shows a random prompt
+
+      // 2nd. do we need to know number of performers for randomness to be distributed equally?
+
+      // 3.
+    </script>
+  </body>
+</html>
