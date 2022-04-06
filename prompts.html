@@ -17,14 +17,17 @@
         {
           type: "rock",
           speed: "fast",
-          text:
-            "You are a chunk of rock that suddenly falls off the side of the cliff. Wait for a moment that feels right, then play a crescendo of increasingly chaotic noise as the rock's fall accelerates.",
+          text: "You are a chunk of rock that suddenly falls off the side of the cliff. Wait for a moment that feels right, then play a crescendo of increasingly chaotic noise as the rock's fall accelerates.",
         },
         {
           type: "rock",
           speed: "slow",
-          text:
-            "You are a layer of sedimentary rock. Choose a location in the image, then play slow sustained bass tones corresponding to each layer below it, rising slowly until you reach the point you have chosen, then stop.",
+          text: "You are a layer of sedimentary rock. Choose a location in the image, then play slow sustained bass tones corresponding to each layer below it, rising slowly until you reach the point you have chosen, then stop.",
+        },
+        {
+          type: "none",
+          speed: "n/a",
+          text: "Just listen."
         },
       ];
 
@@ -33,7 +36,9 @@
 
       const showRandomPrompt = () => {
         const prompt = getRandomPrompt();
-        document.getElementById("prompt-header").innerText = `${prompt.type} (${prompt.speed})`;
+        document.getElementById(
+          "prompt-header"
+        ).innerText = `${prompt.type} (${prompt.speed})`;
         document.getElementById("prompt-text").innerText = prompt.text;
       };
 
