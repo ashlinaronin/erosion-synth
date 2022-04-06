@@ -1,18 +1,29 @@
 <html>
   <head>
     <title>raindrop</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      aside {
+        margin: 16px;
+      }
+    </style>
   </head>
   <body>
-    <div id="instrument"></div>
+    <main style="display: flex;"> 
+      <div id="instrument" style="width: 400px; height: 400px;"></div>  
+      <img id="score-image" src="" height="400" alt="procedurally-generated landscape score">
+    </main>
 
-    <main>
+
+    <aside>
       <h1>prompt</h1>
+      <button type="button" onClick="showRandomPrompt()">choose prompt</button>
       <h2 id="prompt-header"></h2>
       <p id="prompt-text">click button to select a prompt</p>
     </main>
-    <aside>
-      <button type="button" onClick="showRandomPrompt()">choose prompt</button>
-    </aside>
 
     <script
       type="text/javascript"
