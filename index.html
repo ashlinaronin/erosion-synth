@@ -60,7 +60,7 @@
           pitchEnvelope.connect(bell._oscillators[num].harmonicity);
         });
 
-          // pitchEnvelope.connect(bell.frequency);
+        // pitchEnvelope.connect(bell.frequency);
 
         // pitchEnvelope.connect(bell._filterFreqScaler.min);
 
@@ -84,33 +84,51 @@
           pitchDecay: 0.508,
           octaves: 4,
           envelope: {
-            attack: 0.001,
+            attack: 0.01,
             decay: 0.3,
             sustain: 0,
             release: 0.4,
           },
-        }).toDestination();
+        });
+
+        const congaFilter = new Tone.FeedbackCombFilter(0.01, 0.5);
 
         const noiseSynth = new Tone.NoiseSynth({
           envelope: {
-            attack: 0.0001,
+            attack: 0.0,
             decay: 0.3,
             sustain: 0,
-            release: 0.2,
+            release: 0.4,
           },
           volume: -18,
-        }).toDestination();
+        });
 
         const congaPart = new Tone.Sequence(
           (time, pitch) => {
-            bell.triggerAttack(pitch, time, Math.random() * 0.5 + 0.5);
+            // bell.triggerAttack(pitch, time, Math.random() * 0.5 + 0.5);
             conga.triggerAttack(pitch, time, Math.random() * 0.5 + 0.5);
-            noiseSynth.triggerAttackRelease(time);
+            // noiseSynth.triggerAttackRelease(time);
             // pitchEnvelope.triggerAttackRelease("8n", time);
           },
           ["G4", "C5", "C5", "C5"],
           "4n"
         ).start(0);
+
+        const reverb = new Tone.Reverb({
+          decay: 0.8,
+          preDelay: 0.01,
+          wet: 0.7,
+        }).toDestination();
+
+        const trem = new Tone.Tremolo(9, 0.7).start();
+
+        conga.connect(congaFilter);
+
+        congaFilter.connect(reverb);
+        bell.connect(reverb);
+        noiseSynth.connect(reverb);
+
+        trem.connect(reverb);
 
         Tone.Transport.bpm.value = 115;
 
