@@ -1,9 +1,18 @@
 <html>
   <head>
-    <title>erosion-synth</title>
+    <title>raindrop</title>
   </head>
   <body>
     <div id="instrument"></div>
+
+    <main>
+      <h1>prompt</h1>
+      <h2 id="prompt-header"></h2>
+      <p id="prompt-text">click button to select a prompt</p>
+    </main>
+    <aside>
+      <button type="button" onClick="showRandomPrompt()">choose prompt</button>
+    </aside>
 
     <script
       type="text/javascript"
@@ -21,6 +30,8 @@
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/nexusui@2.1.5/dist/NexusUI.min.js"
     ></script>
+    <script type="text/javascript" src="./scripts/prompts-data.js"></script>
+    <script type="text/javascript" src="./scripts/prompts.js"></script>
     <script type="module">
       let xyPad;
 
