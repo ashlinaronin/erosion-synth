@@ -1,99 +1,133 @@
 <html>
-<head>
-  <title>erosion-synth</title>
-</head>
-<body>
+  <head>
+    <title>erosion-synth</title>
+  </head>
+  <body>
+    <div id="instrument">
+      <button type="button" id="play-stop">play/stop</button>
+    </div>
 
-<div id="instrument"></div>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.68/Tone.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"
+    ></script>
+    <!-- <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/nexusui@2.1.5/dist/NexusUI.min.js"
+    ></script> -->
+    <!-- <script type="module">
+      // const createUi = () => {
+      //   const dial = Nexus.Add.Dial("#instrument", { size: [100, 100] });
+      //   const slider = Nexus.Add.Slider("#instrument", { size: [25, 100] });
+      //   const position = Nexus.Add.Position("#instrument", {
+      //     size: [200, 200],
+      //   });
 
+      //   dial.on("change", (v) => console.log(v));
+      //   slider.on("change", (v) => console.log(v));
+      // };
+      // createUi();
+    </script> -->
+    <script type="module">
+      let playing = true;
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.68/Tone.js"></script>
-<script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/nexusui@2.1.5/dist/NexusUI.min.js"></script>
-<script type="text/javascript" src="../tune-master/tune.js"></script>
-<script type="module">
-  // set up tune for alt scales
-  const tune = new Tune();
-  tune.loadScale("mean19");
-  tune.tonicize(220);
+      const play = async () => {
+        const bell = new Tone.MetalSynth({
+          harmonicity: 3,
+          // frequency: 400,
+          resonance: 230,
+          detune: 70,
+          modulationIndex: 12,
+          envelope: {
+            attack: 0.003,
+            decay: 0.3,
+            release: 0.5,
+          },
+          volume: -15,
+        }).toDestination();
+        const pitchEnvelope = new Tone.FrequencyEnvelope({
+          attack: 0.05,
+          decay: 0.3,
+          baseFrequency: 0.1,
+          octaves: 1,
+        });
 
-  // alias tune.note for shorter access
-  const tn = tune.note.bind(tune);
+        [0, 1, 2, 3, 4, 5].forEach((num) => {
+          pitchEnvelope.connect(bell._oscillators[num].harmonicity);
+        });
 
-  const createUi = () => {
-    const dial = Nexus.Add.Dial("#instrument", { size: [100, 100]});
-    const slider = Nexus.Add.Slider("#instrument", { size: [25, 100]});
-    const position = Nexus.Add.Position("#instrument", {size: [200,200]});
+          // pitchEnvelope.connect(bell.frequency);
 
-    dial.on("change", v => console.log(v));
-    slider.on("change", v => console.log(v));
-  };
-  
-  const play = async () => {
-    debugger;
+        // pitchEnvelope.connect(bell._filterFreqScaler.min);
 
+        // pitchEnvelope.connect(bell._oscillators[0].harmonicity);
 
+        // const bellPart = new Tone.Sequence(
+        //   (time, freq) => {
+        //     bell.triggerAttack(freq, time, Math.random() * 0.5 + 0.5);
+        //     pitchEnvelope.triggerAttackRelease("8n", time);
+        //   },
+        //   [
+        //     [300, null, 200],
+        //     [null, 200, 200],
+        //     [null, 200, null],
+        //     [200, null, 200],
+        //   ],
+        //   "4n"
+        // ).start(0);
 
-    // synths
-    const synthA = new Tone.FMSynth();
-    const synthB = new Tone.AMSynth();
-    const synthC = new Tone.PolySynth(Tone.Synth);
-    const pulse = new Tone.PulseOscillator();
+        const conga = new Tone.MembraneSynth({
+          pitchDecay: 0.508,
+          octaves: 4,
+          envelope: {
+            attack: 0.001,
+            decay: 0.3,
+            sustain: 0,
+            release: 0.4,
+          },
+        }).toDestination();
 
-    const pitchLfo = new Tone.LFO(1, tn(3, 2), tn(7, 2)).start();
+        const noiseSynth = new Tone.NoiseSynth({
+          envelope: {
+            attack: 0.0001,
+            decay: 0.3,
+            sustain: 0,
+            release: 0.2,
+          },
+          volume: -18,
+        }).toDestination();
 
-    // fx
-    const distortion = new Tone.Distortion(0.4);
-    const chorus = new Tone.Chorus(4, 2.5, 0.5);
-    const delay = new Tone.Delay(0.1).toDestination();
+        const congaPart = new Tone.Sequence(
+          (time, pitch) => {
+            bell.triggerAttack(pitch, time, Math.random() * 0.5 + 0.5);
+            conga.triggerAttack(pitch, time, Math.random() * 0.5 + 0.5);
+            noiseSynth.triggerAttackRelease(time);
+            // pitchEnvelope.triggerAttackRelease("8n", time);
+          },
+          ["G4", "C5", "C5", "C5"],
+          "4n"
+        ).start(0);
 
-    // inputs to synths
-    pitchLfo.connect(synthB.frequency);
+        Tone.Transport.bpm.value = 115;
 
-    // synths to fx
-    synthA.connect(distortion);
-    synthB.connect(distortion);
-    pulse.connect(delay);
+        Tone.Transport.start();
 
-    // inter-fx connex
-    distortion.connect(chorus);
+        document.getElementById("play-stop").addEventListener("click", () => {
+          if (playing) {
+            Tone.Transport.stop();
+            playing = false;
+          } else {
+            Tone.Transport.start();
+            playing = true;
+          }
+        });
+      };
 
-    // fx to destination
-    delay.toDestination();
-    chorus.toDestination();
-    synthC.toDestination();
-
-    // sequencing
-    const loopA = new Tone.Loop(time => synthA.triggerAttackRelease(tn(3, 2), "8n", time), "4n").start(0).stop("3m");
-    const loopB = new Tone.Loop(time => synthB.triggerAttackRelease(tn(4, 1), "8n", time), "4n").start("8n").stop("4m");
-    const loopC = new Tone.Loop(time => synthC.triggerAttackRelease(tn(5, 1), "16n", time), "4n").start("16n").stop("2m");
-
-    Tone.Transport.scheduleRepeat(time => pulse.start(time).stop(time + 0.01), "8n", "8n", "2m");
-
-    const seq = new Tone.Sequence((time, note) => {
-      synthB.triggerAttackRelease(note, 0.1, time);
-    }, [tn(2), [tn(3), tn(4), tn(5)], tn(7), [tn(6), tn(5)]]);
-    Tone.Transport.scheduleRepeat(time => seq.start(time).stop(time + 0.1), "16n", "4m");
-
-    const chordEvent = new Tone.ToneEvent(((time, chord) => {
-      synthC.triggerAttackRelease(chord, 0.5, time);
-    }), [tn(4), tn(6), tn(8)]);
-    chordEvent.start();
-    chordEvent.loop = 4;
-    chordEvent.loopEnd = "1m";
-
-
-    // the loops start when the Transport is started
-    Tone.Transport.start();
-
-    // ramp up to 800 bpm over 10 seconds
-    Tone.Transport.bpm.rampTo(800, 10);
-    Tone.Transport.bpm.rampTo(80, 10);
-  };
-
-  createUi();
-  StartAudioContext(Tone.context).then(play);
-</script>
-</body>
+      StartAudioContext(Tone.context).then(play);
+    </script>
+  </body>
 </html>
