@@ -36,50 +36,7 @@
       let playing = true;
 
       const play = async () => {
-        const bell = new Tone.MetalSynth({
-          harmonicity: 3,
-          // frequency: 400,
-          resonance: 230,
-          detune: 70,
-          modulationIndex: 12,
-          envelope: {
-            attack: 0.003,
-            decay: 0.3,
-            release: 0.5,
-          },
-          volume: -15,
-        }).toDestination();
-        const pitchEnvelope = new Tone.FrequencyEnvelope({
-          attack: 0.05,
-          decay: 0.3,
-          baseFrequency: 0.1,
-          octaves: 1,
-        });
-
-        [0, 1, 2, 3, 4, 5].forEach((num) => {
-          pitchEnvelope.connect(bell._oscillators[num].harmonicity);
-        });
-
-        // pitchEnvelope.connect(bell.frequency);
-
-        // pitchEnvelope.connect(bell._filterFreqScaler.min);
-
-        // pitchEnvelope.connect(bell._oscillators[0].harmonicity);
-
-        // const bellPart = new Tone.Sequence(
-        //   (time, freq) => {
-        //     bell.triggerAttack(freq, time, Math.random() * 0.5 + 0.5);
-        //     pitchEnvelope.triggerAttackRelease("8n", time);
-        //   },
-        //   [
-        //     [300, null, 200],
-        //     [null, 200, 200],
-        //     [null, 200, null],
-        //     [200, null, 200],
-        //   ],
-        //   "4n"
-        // ).start(0);
-
+        // instantiate objects
         const conga = new Tone.MembraneSynth({
           pitchDecay: 0.508,
           octaves: 4,
@@ -90,50 +47,33 @@
             release: 0.4,
           },
         });
-
-        const congaFilter = new Tone.FeedbackCombFilter(0.01, 0.5);
-
-        const noiseSynth = new Tone.NoiseSynth({
-          envelope: {
-            attack: 0.0,
-            decay: 0.3,
-            sustain: 0,
-            release: 0.4,
-          },
-          volume: -18,
-        });
-
-        const congaPart = new Tone.Sequence(
-          (time, pitch) => {
-            // bell.triggerAttack(pitch, time, Math.random() * 0.5 + 0.5);
-            conga.triggerAttack(pitch, time, Math.random() * 0.5 + 0.5);
-            // noiseSynth.triggerAttackRelease(time);
-            // pitchEnvelope.triggerAttackRelease("8n", time);
-          },
-          ["G4", "C5", "C5", "C5"],
-          "4n"
-        ).start(0);
-
+        const congaFilter = new Tone.FeedbackCombFilter(0.0183, 0.75);
         const reverb = new Tone.Reverb({
           decay: 0.8,
           preDelay: 0.01,
           wet: 0.7,
         }).toDestination();
 
-        const trem = new Tone.Tremolo(9, 0.7).start();
 
+        // connect objects
         conga.connect(congaFilter);
-
         congaFilter.connect(reverb);
-        bell.connect(reverb);
-        noiseSynth.connect(reverb);
+        reverb.toDestination();
 
-        trem.connect(reverb);
 
+        // sequence and transport
+        const congaPart = new Tone.Sequence(
+          (time, pitch) => {
+            conga.triggerAttack(pitch, time, Math.random() * 0.5 + 0.5);
+          },
+          ["G3", "C4", "C4", "C4"],
+          "4n"
+        ).start(0);
         Tone.Transport.bpm.value = 115;
-
         Tone.Transport.start();
 
+
+        // ui
         document.getElementById("play-stop").addEventListener("click", () => {
           if (playing) {
             Tone.Transport.stop();
