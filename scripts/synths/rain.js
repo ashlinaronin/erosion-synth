@@ -1,4 +1,5 @@
 let xyPad;
+let components = [];
 
 // todo: nexus also offers same util
 import { scale } from "./utils.js";
@@ -7,6 +8,12 @@ export const createUi = () => {
   xyPad = Nexus.Add.Position("#instrument", {
     size: [400, 400],
   });
+};
+
+export const dispose = () => {
+  xyPad.destroy();
+  components.forEach((component) => component.dispose());
+  components = [];
 };
 
 export const play = async () => {
@@ -49,6 +56,8 @@ export const play = async () => {
 
   // transport
   Tone.Transport.start();
+
+  components = [raindropSynth, metalSynth, raindropCombFilter, reverb];
 
   // ui
   const debouncedXyHandler = _.debounce(({ x, y }) => {

@@ -1,4 +1,4 @@
-const prompts = [
+export default [
   {
     type: "rock",
     speed: "slow",

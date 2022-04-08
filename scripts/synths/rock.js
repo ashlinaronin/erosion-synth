@@ -1,4 +1,5 @@
 let xyPad;
+let components = [];
 
 import { scale } from "./utils.js";
 
@@ -8,15 +9,21 @@ export const createUi = () => {
   });
 };
 
+export const dispose = () => {
+  xyPad.destroy();
+  components.forEach((component) => component.dispose());
+  components = [];
+};
+
 export const play = async () => {
   // instantiate objects
 
-  const lfo = new Tone.LFO({
-    frequency: 60,
-    type: "triangle",
-    min: 200,
-    max: 400,
-  }).start();
+  //   const lfo = new Tone.LFO({
+  //     frequency: 60,
+  //     type: "triangle",
+  //     min: 200,
+  //     max: 400,
+  //   }).start();
   const oscillator1 = new Tone.FMOscillator({
     frequency: 300,
     type: "square",
@@ -67,18 +74,20 @@ export const play = async () => {
   Tone.Transport.bpm.value = 70;
   Tone.Transport.start();
 
-  const pattern = new Tone.Pattern(
-    function (time, note) {
-      oscillator1.frequency.value = note;
-      freqEnv.baseFrequency = note;
-      ampEnv.triggerAttackRelease("16n", time);
-      freqEnv.triggerAttack();
-    },
-    ["C2", "D2", "E2", "A2"],
-    "upDown"
-  );
+  //   const pattern = new Tone.Pattern(
+  //     function (time, note) {
+  //       oscillator1.frequency.value = note;
+  //       freqEnv.baseFrequency = note;
+  //       ampEnv.triggerAttackRelease("16n", time);
+  //       freqEnv.triggerAttack();
+  //     },
+  //     ["C2", "D2", "E2", "A2"],
+  //     "upDown"
+  //   );
 
-//   pattern.start();
+  //   pattern.start();
+
+  components = [oscillator1, oscillator2, ampEnv, freqEnv, filter, reverb];
 
   // ui
   const debouncedXyHandler = _.debounce(({ x, y }) => {

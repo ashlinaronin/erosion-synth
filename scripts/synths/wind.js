@@ -1,5 +1,6 @@
 let wind1GainDial;
 let wind2GainDial;
+let components = [];
 
 export const createUi = () => {
   wind1GainDial = Nexus.Add.Dial("#instrument", {
@@ -8,6 +9,13 @@ export const createUi = () => {
   wind2GainDial = Nexus.Add.Dial("#instrument", {
     size: [100, 100],
   });
+};
+
+export const dispose = () => {
+  wind1GainDial.destroy();
+  wind2GainDial.destroy();
+  components.forEach((component) => component.dispose());
+  components = [];
 };
 
 export const play = async () => {
@@ -44,6 +52,8 @@ export const play = async () => {
   // transport
   Tone.Transport.bpm.value = 70;
   Tone.Transport.start();
+
+  components = [noise, gain1, gain2, autoFilter1, autoFilter2, reverb];
 
   // ui
   wind1GainDial.on("change", (v) => {

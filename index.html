@@ -20,7 +20,7 @@
 
     <aside>
       <h1>prompt</h1>
-      <button type="button" onClick="showRandomPrompt()">choose prompt</button>
+      <button type="button" id="prompt-button">choose prompt</button>
       <h2 id="prompt-header"></h2>
       <p id="prompt-text">click button to select a prompt</p>
     </main>
@@ -41,14 +41,11 @@
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/nexusui@2.1.5/dist/NexusUI.min.js"
     ></script>
-    <script type="text/javascript" src="./scripts/prompts-data.js"></script>
-    <script type="text/javascript" src="./scripts/prompts.js"></script>
     <script type="module">
-      const synthName = "stream";
-      const synth = await import(`./scripts/synths/${synthName}.js`);
+      import showRandomPrompt from "./scripts/prompts.js";
+      document.getElementById("prompt-button").addEventListener("click", showRandomPrompt);
+
       await StartAudioContext(Tone.context)
-      await synth.createUi();
-      await synth.play();
     </script>
   </body>
 </html>

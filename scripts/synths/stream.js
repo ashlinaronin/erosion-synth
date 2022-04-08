@@ -1,6 +1,7 @@
 let numVoicesSlider;
 let gainDial;
 let streamVoices = [];
+let components = [];
 
 export const createUi = () => {
   numVoicesSlider = Nexus.Add.Slider("#instrument", {
@@ -12,6 +13,17 @@ export const createUi = () => {
   gainDial = Nexus.Add.Dial("#instrument", {
     size: [100, 100],
   });
+};
+
+export const dispose = () => {
+  numVoicesSlider.destroy();
+  gainDial.destroy();
+  components.forEach((component) => component.dispose());
+  streamVoices.forEach((voiceComponents) => {
+    voiceComponents.forEach((component) => component.dispose());
+  });
+  streamVoices = [];
+  components = [];
 };
 
 const createVoice = (lfoFrequency, baseFilterFrequency) => {
@@ -66,6 +78,8 @@ export const play = async () => {
       });
     }
   }, 100);
+
+  components = [reverb, gain];
 
   numVoicesSlider.on("change", debouncedSliderHandler);
 
