@@ -1,19 +1,20 @@
-let xyPad;
+let rainPad;
 let components = [];
 
 // todo: nexus also offers same util
 import { scale } from "./utils.js";
 
 export const createUi = () => {
-  xyPad = Nexus.Add.Position("#instrument", {
+  rainPad = Nexus.Add.Position("#instrument", {
     size: [400, 400],
   });
 };
 
 export const dispose = () => {
-  xyPad.destroy();
+  rainPad.destroy();
   components.forEach((component) => component.dispose());
   components = [];
+  document.getElementById("instrument").replaceChildren();
 };
 
 export const play = async () => {
@@ -79,5 +80,5 @@ export const play = async () => {
     metalSynth.triggerAttackRelease("16n", timeOffset);
   }, 32);
 
-  xyPad.on("change", debouncedXyHandler);
+  rainPad.on("change", debouncedXyHandler);
 };

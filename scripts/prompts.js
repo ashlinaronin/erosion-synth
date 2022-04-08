@@ -20,6 +20,7 @@ const loadSynth = async (synthName) => {
 
 const showRandomPrompt = () => {
   currentSynth?.dispose();
+  currentSynth = null;
 
   const prompt = getRandomPrompt();
   const imageSrc = getRandomImageSrc();
@@ -31,7 +32,8 @@ const showRandomPrompt = () => {
   document.getElementById("score-image").src = imageSrc;
 
   if (prompt.type === "ice") {
-    console.log("use grainfields");
+    console.log("use grainfields, not loading a synth...");
+    return;
   }
 
   if (prompt.type !== "none") {

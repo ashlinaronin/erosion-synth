@@ -13,6 +13,7 @@ export const dispose = () => {
   xyPad.destroy();
   components.forEach((component) => component.dispose());
   components = [];
+  document.getElementById("instrument").replaceChildren();
 };
 
 export const play = async () => {
