@@ -45,10 +45,6 @@ export const play = async () => {
 
   // ui
   const debouncedSliderHandler = _.debounce((v) => {
-    console.log(v);
-
-    if (v === 0) return;
-
     streamVoices.forEach((voiceComponents) =>
       voiceComponents.forEach((component) => component.dispose())
     );
@@ -68,7 +64,6 @@ export const play = async () => {
   numVoicesSlider.on("change", debouncedSliderHandler);
 
   gainDial.on("change", (v) => {
-    console.log(v);
     gain.gain.value = v;
   });
 };
