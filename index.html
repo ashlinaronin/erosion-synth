@@ -6,24 +6,46 @@
         margin: 0;
       }
 
+      main {
+        /* display: flex; */
+        /* justify-content: space-between; */
+        display: flex;
+        justify-content: center;
+      }
+
+      #instrument {
+        width: 400px;
+        height: 400px;
+      }
+
+      #score-image {
+        height: 400px;
+      }
+
       aside {
+        display: flex;
         margin: 16px;
+      }
+
+      aside > * {
+        width: 50%;
       }
     </style>
   </head>
   <body>
-    <main style="display: flex;"> 
-      <div id="instrument" style="width: 400px; height: 400px;"></div>  
-      <img id="score-image" src="" height="400" alt="procedurally-generated landscape score">
+    <main> 
+      <img id="score-image" src="" alt="procedurally-generated landscape score" />
     </main>
-
 
     <aside>
-      <h1>prompt</h1>
-      <button type="button" id="prompt-button">choose prompt</button>
-      <h2 id="prompt-header"></h2>
-      <p id="prompt-text">click button to select a prompt</p>
-    </main>
+      <div id="instrument">&nbsp;</div>  
+      <div>
+        <h1>prompt</h1>
+        <button type="button" id="prompt-button">choose prompt</button>
+        <h2 id="prompt-header"></h2>
+        <p id="prompt-text">click button to select a prompt</p>
+      </div>
+   </aside>
 
     <script
       type="text/javascript"
