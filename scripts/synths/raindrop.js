@@ -1,8 +1,6 @@
 let xyPad;
 
-function scale(number, inMin, inMax, outMin, outMax) {
-  return ((number - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
-}
+import { scale } from "./utils.js";
 
 export const createUi = () => {
   xyPad = Nexus.Add.Position("#instrument", {
@@ -39,7 +37,7 @@ export const play = async () => {
     decay: 0.7,
     preDelay: 0.03,
     wet: 0.4,
-  }).toDestination();
+  });
 
   // connect objects
   metalSynth.connect(raindropCombFilter);
