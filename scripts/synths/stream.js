@@ -45,20 +45,26 @@ export const play = async () => {
 
   // ui
   const debouncedSliderHandler = _.debounce((v) => {
-    streamVoices.forEach((voiceComponents) =>
-      voiceComponents.forEach((component) => component.dispose())
-    );
-    streamVoices = [];
-
-    streamVoices = Array(v)
-      .fill(1)
-      .map((x) => {
-        const voice = createVoice(10, 10000);
-        const [noise, autoFilter] = voice;
-        autoFilter.connect(reverb);
-
-        return voice;
+    const voiceCountDiff = v - streamVoices.length;
+    if (voiceCountDiff === 0) return;
+    if (voiceCountDiff > 0) {
+      streamVoices = [
+        ...streamVoices,
+        ...Array(voiceCountDiff)
+          .fill(1)
+          .map(() => {
+            const voice = createVoice(10, 10000);
+            const [noise, autoFilter] = voice;
+            autoFilter.connect(reverb);
+            return voice;
+          }),
+      ];
+    } else {
+      const removed = streamVoices.splice(0, -voiceCountDiff);
+      removed.forEach((voiceComponents) => {
+        voiceComponents.forEach((component) => component.dispose());
       });
+    }
   }, 100);
 
   numVoicesSlider.on("change", debouncedSliderHandler);
