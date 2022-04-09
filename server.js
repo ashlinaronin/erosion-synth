@@ -8,6 +8,12 @@ const io = new Server(server);
 app.use(express.static("public"));
 
 let scoreChangeInterval;
+const totalImages = 8;
+let imageIndex = 0;
+
+const incrementImageIndex = () => {
+  imageIndex = (imageIndex + 1) % totalImages;
+};
 
 io.on("connection", (socket) => {
   console.log("a user connected");
@@ -16,13 +22,18 @@ io.on("connection", (socket) => {
   });
 
   socket.on("score.start", ({ seconds }) => {
+    incrementImageIndex();
+
     console.log(
-      `received score.start, starting timer for every ${seconds}s and sending initial score.change`
+      `received score.start, starting timer for every ${seconds}s and sending initial score.change for image ${imageIndex}`
     );
-    io.emit("score.change");
+    io.emit("score.change", { imageIndex });
     scoreChangeInterval = setInterval(() => {
-      console.log(`${seconds}s passed, sending score.change to all clients`);
-      io.emit("score.change");
+      console.log(
+        `${seconds}s passed, sending score.change for image ${imageIndex} to all clients`
+      );
+      incrementImageIndex();
+      io.emit("score.change", { imageIndex });
     }, seconds * 1000);
   });
 

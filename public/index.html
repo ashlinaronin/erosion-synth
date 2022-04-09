@@ -69,15 +69,16 @@
     ></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="module">
-      import showRandomPrompt from "./scripts/prompts.js";
+      import { showRandomPrompt, showImage } from "./scripts/prompts.js";
       document
         .getElementById("prompt-button")
         .addEventListener("click", showRandomPrompt);
 
       const socket = io();
 
-      socket.on("score.change", () => {
+      socket.on("score.change", ({ imageIndex }) => {
         console.log("received score.change, showing random prompt");
+        showImage(imageIndex);
         showRandomPrompt();
       });
 
