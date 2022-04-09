@@ -66,12 +66,17 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="module">
       import { showRandomPrompt, showImage,loadSynth } from "./scripts/prompts.js";
-      const socket = io();
-      socket.on("score.change", ({ imageIndex }) => {
-        console.log("received score.change, showing random prompt");
-        showImage(imageIndex);
-        showRandomPrompt();
-      });
+      
+      // don't bother loading sockets if we are just running pure html for debugging
+      if (io) {
+        const socket = io();
+        socket.on("score.change", ({ imageIndex }) => {
+          console.log("received score.change, showing random prompt");
+          showImage(imageIndex);
+          showRandomPrompt();
+        });
+      }
+      
 
       // if synth is specified in URL, load it (for debugging)
       const queryParams = new URLSearchParams(window.location.search);
