@@ -15,7 +15,8 @@
   <body>
     <main>
       <form id="controller">
-        <input type="number" />
+        <label for="seconds">Seconds per image</label>
+        <input type="number" name="seconds" id="seconds" />
         <button type="submit">start timer</button>
         <button id="stop" type="button">stop timer</button>
       </form>
@@ -29,7 +30,9 @@
         .querySelector("form#controller")
         .addEventListener("submit", (e) => {
           e.preventDefault();
-          socket.emit("score.start");
+
+          const seconds = document.getElementById("seconds").value;
+          socket.emit("score.start", { seconds });
         });
 
       document.querySelector("button#stop").addEventListener("click", (e) => {

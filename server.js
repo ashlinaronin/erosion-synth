@@ -15,15 +15,15 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
 
-  socket.on("score.start", (msg) => {
+  socket.on("score.start", ({ seconds }) => {
     console.log(
-      "received score.start, starting timer and sending initial score.change"
+      `received score.start, starting timer for every ${seconds}s and sending initial score.change`
     );
     io.emit("score.change");
     scoreChangeInterval = setInterval(() => {
-      console.log("sending score.change to all clients");
+      console.log(`${seconds}s passed, sending score.change to all clients`);
       io.emit("score.change");
-    }, 10000);
+    }, seconds * 1000);
   });
 
   socket.on("score.stop", (msg) => {
