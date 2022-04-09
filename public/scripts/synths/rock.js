@@ -26,20 +26,22 @@ export const play = async () => {
   //     max: 400,
   //   }).start();
   const oscillator1 = new Tone.FMOscillator({
-    frequency: 300,
+    frequency: 100,
+    detune: -3,
     type: "square",
     modulationType: "square",
     harmonicity: 0.6,
     modulationIndex: 13,
-    volume: -4,
+    volume: -12,
   }).start();
   const oscillator2 = new Tone.FMOscillator({
-    frequency: 400,
+    frequency: 100,
+    detune: 3,
     type: "triangle",
     modulationType: "sine",
-    harmonicity: 3,
+    harmonicity: 6,
     modulationIndex: 8,
-    volume: -4,
+    volume: -12,
   }).start();
   const ampEnv = new Tone.AmplitudeEnvelope({
     attack: 0.01,
@@ -53,8 +55,8 @@ export const play = async () => {
     octaves: 2,
     exponent: 3.5,
   });
-  //   const filter = new Tone.Filter(168000, "lowpass");
-  const filter = new Tone.FeedbackCombFilter(0.0283, 0.65);
+    const filter = new Tone.Filter(3000, "lowpass");
+  // const filter = new Tone.FeedbackCombFilter(0.0183, 0.2);
 
   const reverb = new Tone.Reverb({
     decay: 0.7,
@@ -62,12 +64,16 @@ export const play = async () => {
     wet: 0.4,
   });
 
+  const distortion = new Tone.Distortion(0.25);
+
   // connect objects
   oscillator1.connect(ampEnv);
   oscillator2.connect(ampEnv);
   //   oscillator2.connect(oscillator1.frequency);
   //   lfo.connect(oscillator1.frequency);
-  ampEnv.connect(filter);
+  // ampEnv.connect(filter);
+  ampEnv.connect(distortion);
+  distortion.connect(filter);
   filter.connect(reverb);
   reverb.toDestination();
 
@@ -75,30 +81,37 @@ export const play = async () => {
   Tone.Transport.bpm.value = 70;
   Tone.Transport.start();
 
-  //   const pattern = new Tone.Pattern(
-  //     function (time, note) {
-  //       oscillator1.frequency.value = note;
-  //       freqEnv.baseFrequency = note;
-  //       ampEnv.triggerAttackRelease("16n", time);
-  //       freqEnv.triggerAttack();
-  //     },
-  //     ["C2", "D2", "E2", "A2"],
-  //     "upDown"
-  //   );
+  const pattern = new Tone.Pattern(
+    function (time, note) {
+      oscillator1.frequency.value = note;
+      freqEnv.baseFrequency = note;
+      ampEnv.triggerAttackRelease("16n", time);
+      freqEnv.triggerAttack();
+    },
+    ["C2", "D2", "E2", "A2"],
+    "upDown"
+  );
 
-  //   pattern.start();
+  // pattern.start();
 
   components = [oscillator1, oscillator2, ampEnv, freqEnv, filter, reverb];
 
   // ui
   const debouncedXyHandler = _.debounce(({ x, y }) => {
     console.log(x, y);
-    const freq = scale(x, 0, 1, 100, 300);
+    const freq = scale(x, 0, 1, 40, 100);
+    const dist = scale(y, 0, 1, 0.3, 1);
+    const decay = scale(y, 0, 1, 0, 2);
+    const release = scale(y, 0, 1, 0, 5);
     oscillator1.frequency.value = freq;
+    oscillator2.frequency.value = freq;
+    ampEnv.decay = decay;
+    ampEnv.release = release;
     freqEnv.baseFrequency = freq;
+    distortion.distortion = dist;
     ampEnv.triggerAttackRelease("16n");
     freqEnv.triggerAttack();
-  }, 32);
+  }, 10);
 
   xyPad.on("change", debouncedXyHandler);
 };
