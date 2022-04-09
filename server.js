@@ -22,6 +22,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("score.start", ({ seconds }) => {
+    // clear interval in case there is already one going
+    clearInterval(scoreChangeInterval);
     incrementImageIndex();
 
     console.log(
