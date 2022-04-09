@@ -7,8 +7,6 @@
       }
 
       main {
-        /* display: flex; */
-        /* justify-content: space-between; */
         display: flex;
         justify-content: center;
       }
@@ -77,8 +75,8 @@
 
       // if synth is specified in URL, load it (for debugging)
       const queryParams = new URLSearchParams(window.location.search);
-      if (queryParams.has('synth')) {
-        await loadSynth(queryParams.get('synth'));
+      if (queryParams.has("synth")) {
+        await loadSynth(queryParams.get("synth"));
       }
 
       await StartAudioContext(Tone.context);
