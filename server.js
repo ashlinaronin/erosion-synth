@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("score.stop", (msg) => {
+    console.log("received score.stop, stopping timer");
     clearInterval(scoreChangeInterval);
   });
 });

@@ -17,6 +17,7 @@
       <form id="controller">
         <input type="number" />
         <button type="submit">start timer</button>
+        <button id="stop" type="button">stop timer</button>
       </form>
     </main>
 
@@ -24,10 +25,15 @@
     <script type="module">
       const socket = io();
 
-      document.getElementById("controller").addEventListener("submit", (e) => {
-        debugger;
-        e.preventDefault();
-        socket.emit("score.start");
+      document
+        .querySelector("form#controller")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          socket.emit("score.start");
+        });
+
+      document.querySelector("button#stop").addEventListener("click", (e) => {
+        socket.emit("score.stop");
       });
     </script>
   </body>
