@@ -44,10 +44,8 @@
     <aside>
       <div id="instrument">&nbsp;</div>
       <div>
-        <h1>prompt</h1>
-        <button type="button" id="prompt-button">choose prompt</button>
-        <h2 id="prompt-header"></h2>
-        <p id="prompt-text">click button to select a prompt</p>
+        <h1 id="prompt-header">prompt</h2>
+        <p id="prompt-text">prompt will appear when timer starts.</p>
       </div>
     </aside>
 
@@ -70,12 +68,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="module">
       import { showRandomPrompt, showImage } from "./scripts/prompts.js";
-      document
-        .getElementById("prompt-button")
-        .addEventListener("click", showRandomPrompt);
-
       const socket = io();
-
       socket.on("score.change", ({ imageIndex }) => {
         console.log("received score.change, showing random prompt");
         showImage(imageIndex);
