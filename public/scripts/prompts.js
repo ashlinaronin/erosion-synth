@@ -5,7 +5,9 @@ let currentSynth = null;
 const getRandomPrompt = () =>
   prompts[Math.floor(Math.random() * prompts.length)];
 
-const loadSynth = async (synthName) => {
+export const loadSynth = async (synthName) => {
+  currentSynth?.dispose();
+  currentSynth = null;
   currentSynth = await import(`./synths/${synthName}.js`);
   await currentSynth.createUi();
   await currentSynth.play();

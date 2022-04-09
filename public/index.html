@@ -67,13 +67,19 @@
     ></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="module">
-      import { showRandomPrompt, showImage } from "./scripts/prompts.js";
+      import { showRandomPrompt, showImage,loadSynth } from "./scripts/prompts.js";
       const socket = io();
       socket.on("score.change", ({ imageIndex }) => {
         console.log("received score.change, showing random prompt");
         showImage(imageIndex);
         showRandomPrompt();
       });
+
+      // if synth is specified in URL, load it (for debugging)
+      const queryParams = new URLSearchParams(window.location.search);
+      if (queryParams.has('synth')) {
+        await loadSynth(queryParams.get('synth'));
+      }
 
       await StartAudioContext(Tone.context);
     </script>
