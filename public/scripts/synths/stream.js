@@ -8,7 +8,7 @@ export const createUi = () => {
   numVoicesSlider = Nexus.Add.Slider("#instrument", {
     size: [100, 20],
     min: 0,
-    max: 8,
+    max: 16,
     step: 1,
   });
   numVoicesNumber = Nexus.Add.Number("#instrument");
@@ -36,7 +36,7 @@ const createVoice = (lfoFrequency, baseFilterFrequency) => {
   const autoFilter = new Tone.AutoFilter({
     frequency: lfoFrequency,
     baseFrequency: baseFilterFrequency,
-    octaves: 8,
+    octaves: 4,
   }).start();
   noise.connect(autoFilter);
   return [noise, autoFilter];
@@ -69,8 +69,8 @@ export const play = async () => {
         ...streamVoices,
         ...Array(voiceCountDiff)
           .fill(1)
-          .map(() => {
-            const voice = createVoice(10, 10000);
+          .map((index) => {
+            const voice = createVoice(10, 2000 * (index + 1));
             const [noise, autoFilter] = voice;
             autoFilter.connect(reverb);
             return voice;
