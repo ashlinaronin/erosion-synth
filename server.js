@@ -14,6 +14,12 @@ io.on("connection", (socket) => {
   });
 });
 
+
+
 server.listen(3000, () => {
   console.log("listening on *:3000");
+  const interval = setInterval(() => {
+    console.log('sending score.change to all clients');
+    io.emit('score.change');
+  }, 10000);
 });
