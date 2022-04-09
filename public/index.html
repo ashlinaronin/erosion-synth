@@ -63,9 +63,12 @@
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/nexusui@2.1.5/dist/NexusUI.min.js"
     ></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script type="module">
       import showRandomPrompt from "./scripts/prompts.js";
       document.getElementById("prompt-button").addEventListener("click", showRandomPrompt);
+
+      const socket = io();
 
       await StartAudioContext(Tone.context)
     </script>
