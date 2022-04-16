@@ -32,13 +32,13 @@ io.on("connection", (socket) => {
     console.log(
       `received score.start, starting timer for every ${seconds}s and sending initial score.change for image ${imageIndex}`
     );
-    io.emit("score.change", { imageIndex, totalIterations });
+    io.emit("score.change", { imageIndex, totalIterations, seconds });
     scoreChangeInterval = setInterval(() => {
       console.log(
         `${seconds}s passed, sending score.change for image ${imageIndex} to all clients`
       );
       incrementImageIndex();
-      io.emit("score.change", { imageIndex, totalIterations });
+      io.emit("score.change", { imageIndex, totalIterations, seconds });
     }, seconds * 1000);
   });
 

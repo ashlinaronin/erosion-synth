@@ -15,11 +15,11 @@
   <body>
     <main>
       <form id="controller">
+        <h1 id="iterations">Images shown: n/a</h1>
         <label for="seconds">Seconds per image</label>
         <input type="number" required name="seconds" id="seconds" value="60" />
         <button type="submit">start timer</button>
         <button id="stop" type="button">stop timer</button>
-        <h1 id="iterations">Images shown: n/a</h1>
       </form>
     </main>
 
@@ -40,8 +40,12 @@
         socket.emit("score.stop");
       });
 
-      socket.on("score.change", ({ totalIterations }) => {
-        document.getElementById("iterations").innerText = `Images shown: ${totalIterations}`;
+      socket.on("score.change", ({ totalIterations, seconds }) => {
+        document.getElementById(
+          "iterations"
+        ).innerText = `Images shown: ${totalIterations}`;
+        debugger;
+        document.getElementById("seconds").value = seconds;
       });
     </script>
   </body>
