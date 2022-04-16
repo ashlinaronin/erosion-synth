@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>controller</title>
+    <title>geomorph :: controller</title>
     <style>
       body {
         margin: 0;
@@ -19,6 +19,7 @@
         <input type="number" required name="seconds" id="seconds" value="60" />
         <button type="submit">start timer</button>
         <button id="stop" type="button">stop timer</button>
+        <h1 id="iterations">Images shown: n/a</h1>
       </form>
     </main>
 
@@ -37,6 +38,10 @@
 
       document.querySelector("button#stop").addEventListener("click", (e) => {
         socket.emit("score.stop");
+      });
+
+      socket.on("score.change", ({ totalIterations }) => {
+        document.getElementById("iterations").innerText = `Images shown: ${totalIterations}`;
       });
     </script>
   </body>
