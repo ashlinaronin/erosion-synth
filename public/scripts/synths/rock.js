@@ -18,13 +18,6 @@ export const dispose = () => {
 
 export const play = async () => {
   // instantiate objects
-
-  //   const lfo = new Tone.LFO({
-  //     frequency: 60,
-  //     type: "triangle",
-  //     min: 200,
-  //     max: 400,
-  //   }).start();
   const oscillator1 = new Tone.FMOscillator({
     frequency: 100,
     detune: -3,
@@ -47,7 +40,7 @@ export const play = async () => {
     attack: 0.01,
     decay: 0.5,
     sustain: 0.7,
-    release: 0.5,
+    release: 0.8,
   });
   const freqEnv = new Tone.FrequencyEnvelope({
     attack: 0.01,
@@ -55,8 +48,7 @@ export const play = async () => {
     octaves: 2,
     exponent: 3.5,
   });
-    const filter = new Tone.Filter(3000, "lowpass");
-  // const filter = new Tone.FeedbackCombFilter(0.0183, 0.2);
+  const filter = new Tone.Filter(3000, "lowpass");
 
   const reverb = new Tone.Reverb({
     decay: 0.7,
@@ -69,16 +61,13 @@ export const play = async () => {
   // connect objects
   oscillator1.connect(ampEnv);
   oscillator2.connect(ampEnv);
-  //   oscillator2.connect(oscillator1.frequency);
-  //   lfo.connect(oscillator1.frequency);
-  // ampEnv.connect(filter);
   ampEnv.connect(distortion);
   distortion.connect(filter);
   filter.connect(reverb);
   reverb.toDestination();
 
   // transport
-  Tone.Transport.bpm.value = 70;
+  Tone.Transport.bpm.value = 30;
   Tone.Transport.start();
 
   const pattern = new Tone.Pattern(
@@ -102,7 +91,7 @@ export const play = async () => {
     const freq = scale(x, 0, 1, 40, 100);
     const dist = scale(y, 0, 1, 0.3, 1);
     const decay = scale(y, 0, 1, 0, 2);
-    const release = scale(y, 0, 1, 0, 5);
+    const release = scale(y, 0, 1, 0, 3);
     oscillator1.frequency.value = freq;
     oscillator2.frequency.value = freq;
     ampEnv.decay = decay;
