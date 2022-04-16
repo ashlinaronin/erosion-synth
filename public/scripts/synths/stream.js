@@ -1,8 +1,10 @@
 let numVoicesSlider;
 let numVoicesNumber;
-let streamGainDial;
+let panGainPosition;
 let streamVoices = [];
 let components = [];
+
+import { scale } from "./utils.js";
 
 export const createUi = () => {
   numVoicesSlider = Nexus.Add.Slider("#instrument", {
@@ -13,15 +15,17 @@ export const createUi = () => {
   });
   numVoicesNumber = Nexus.Add.Number("#instrument");
   numVoicesNumber.link(numVoicesSlider);
-  streamGainDial = Nexus.Add.Dial("#instrument", {
-    size: [100, 100],
+  panGainPosition = Nexus.Add.Position("#instrument", {
+    size: [400, 400],
+    x: 0.5,
+    y: 0,
   });
 };
 
 export const dispose = () => {
   numVoicesSlider.destroy();
   numVoicesNumber.destroy();
-  streamGainDial.destroy();
+  painGainPosition.destroy();
   components.forEach((component) => component.dispose());
   streamVoices.forEach((voiceComponents) => {
     voiceComponents.forEach((component) => component.dispose());
@@ -51,9 +55,11 @@ export const play = async () => {
     wet: 0.4,
   });
   const gain = new Tone.Gain(0);
+  const panner = new Tone.Panner(0);
 
   // connect objects
-  reverb.connect(gain);
+  reverb.connect(panner);
+  panner.connect(gain);
   gain.toDestination();
 
   // transport
@@ -84,11 +90,12 @@ export const play = async () => {
     }
   }, 100);
 
-  components = [reverb, gain];
+  components = [reverb, panner, gain];
 
   numVoicesSlider.on("change", debouncedSliderHandler);
 
-  streamGainDial.on("change", (v) => {
-    gain.gain.value = v;
+  panGainPosition.on("change", ({ x, y }) => {
+    panner.pan.value = scale(x, 0, 1, -1, 1);
+    gain.gain.value = y;
   });
 };
