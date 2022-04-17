@@ -78,7 +78,7 @@ export const play = async () => {
 
     raindropSynth.triggerAttackRelease(freq, "16n", timeOffset);
     metalSynth.triggerAttackRelease("16n", timeOffset);
-  }, 32);
+  }, 10);
 
   rainPad.on("change", debouncedXyHandler);
 };
