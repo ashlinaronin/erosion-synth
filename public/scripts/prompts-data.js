@@ -2,37 +2,37 @@ export default [
   {
     type: "rock",
     speed: "slow",
-    text: "You are a layer of sedimentary rock. Choose a location in the image, then play slow sustained bass tones corresponding to each layer below it, rising slowly until you reach the point you have chosen, then stop.",
+    text: "You are a layer of sedimentary rock. Choose a location in the image, then start at the lowest point and play slow, sustained, ascending bass tones corresponding to each layer until you reach the point you have chosen, then stop.",
   },
   {
     type: "rock",
     speed: "fast",
-    text: "You are a chunk of rock that suddenly falls off the side of the cliff. Wait for a moment that feels right, then play a crescendo of increasingly chaotic noise as the rock's fall accelerates.",
+    text: "You are a chunk of rock that suddenly falls off the side of the cliff. Wait for a moment that feels right, then play a crescendo of increasingly chaotic noise as the rock’s fall accelerates.",
   },
   {
     type: "stream",
     speed: "slow",
-    text: "You are a meandering stream. Start at a location of your choice and follow the contours of where the water would flow, adjusting the distance and flow rate as you go, until you have reached the edge of the frame.",
+    text: "You are a meandering stream. Start at a location of your choice and slowly trace the contours of where the water would flow, until you have reached the edge of the frame.",
   },
   {
     type: "stream",
     speed: "fast",
-    text: "You are a rushing river. Make your way downhill quickly and with a high flow rate.",
+    text: "You are a rushing river. Make your way downstream quickly and powerfully.",
   },
   {
     type: "rain",
     speed: "slow",
-    text: "You are a rain cloud moving slowly across the sky, dropping water in your wake. Remember how rain clouds get stuck at mountain tops and drop more water right near them.",
+    text: "You are a single raindrop falling slowly from the sky. Trace your fall path and splat when you hit the ground, then start over again from the sky.",
   },
   {
     type: "rain",
     speed: "fast",
-    text: "You are a single raindrop falling from the sky. Fall until you hit the ground, splat, then start over from the sky.",
+    text: "You are a storm cloud moving furiously across the sky, dropping raindrops in your wake. As you approach mountains, slow down and precipitate more densely.",
   },
   {
     type: "wind",
     speed: "slow",
-    text: "You are a mild breeze blowing through a valley. Follow the lines of the wall slowly.",
+    text: "You are a mild breeze blowing through a valley. Gently follow the lines of the valley wall, picking up in intensity and swirling as you catch updrafts.",
   },
   {
     type: "wind",
@@ -42,12 +42,12 @@ export default [
   {
     type: "ice",
     speed: "slow",
-    text: "You are a glacier traveling slowly downhill, sliding over bedrock and carving out basins. Percussion should be slow and gentle but with roughness at a faster tempo underneath the surface.",
+    text: "You are a glacier traveling slowly downhill, sliding over bedrock and carving out basins. Play slow and gentle percussion, but with roughness at a faster tempo underneath the surface.",
   },
   {
     type: "ice",
     speed: "fast",
-    text: "You are a piece of a glacier that has suddenly “calved”, or come detached from the larger chunk. Introduce some sudden propulsive energy to the rhythm.",
+    text: "You are an iceberg that has suddenly calved from a glacier. Introduce some propulsive energy to the rhythm.",
   },
   {
     type: "none",
