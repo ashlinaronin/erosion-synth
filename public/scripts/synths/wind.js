@@ -9,9 +9,11 @@ import { scale } from "./utils.js";
 export const createUi = () => {
   wind1GainDial = Nexus.Add.Dial("#instrument", {
     size: [100, 100],
+    value: 0.5, // just for debugging
   });
   wind2GainDial = Nexus.Add.Dial("#instrument", {
     size: [100, 100],
+    value: 0.5, // just for debugging
   });
   wind1FreqDial = Nexus.Add.Dial("#instrument", {
     size: [100, 100],
@@ -33,18 +35,18 @@ export const dispose = () => {
 
 export const play = async () => {
   // instantiate objects
-  const noise = new Tone.Noise("pink").start();
+  const noise1 = new Tone.Noise("pink").start();
+  const noise2 = new Tone.Noise("pink").start();
   const gain1 = new Tone.Gain(0);
   const gain2 = new Tone.Gain(0);
-
   const autoFilter1 = new Tone.AutoFilter({
-    frequency: 0.05,
-    baseFrequency: 16000,
+    frequency: 0.5,
+    baseFrequency: 8000,
     octaves: 8,
   }).start();
   const autoFilter2 = new Tone.AutoFilter({
-    frequency: 0.15,
-    baseFrequency: 8000,
+    frequency: 2,
+    baseFrequency: 16000,
     octaves: 4,
   }).start();
   const reverb = new Tone.Reverb({
@@ -54,19 +56,29 @@ export const play = async () => {
   });
 
   // connect objects
-  noise.connect(autoFilter1);
-  noise.connect(autoFilter2);
+  noise1.connect(autoFilter1);
+  noise2.connect(autoFilter2);
   autoFilter1.connect(gain1);
   autoFilter2.connect(gain2);
+
   gain1.connect(reverb);
   gain2.connect(reverb);
+
   reverb.toDestination();
 
   // transport
   Tone.Transport.bpm.value = 70;
   Tone.Transport.start();
 
-  components = [noise, gain1, gain2, autoFilter1, autoFilter2, reverb];
+  components = [
+    noise1,
+    noise2,
+    gain1,
+    gain2,
+    autoFilter1,
+    autoFilter2,
+    reverb,
+  ];
 
   // ui
   wind1GainDial.on("change", (v) => {
@@ -79,12 +91,22 @@ export const play = async () => {
   });
   wind1FreqDial.on("change", (v) => {
     console.log(v);
-    const freq = scale(v, 0, 1, 0.5, 60);
-    autoFilter1.baseFrequency = freq;
+    noise1.set({
+      playbackRate: scale(v, 0, 1, 0.001, 0.5),
+    });
+
+    autoFilter1.set({
+      frequency: scale(v, 0, 1, 0.005, 2),
+    });
   });
   wind2FreqDial.on("change", (v) => {
     console.log(v);
-    const freq = scale(v, 0, 1, 0.5, 60);
-    autoFilter2.baseFrequency = freq;
+    noise2.set({
+      playbackRate: scale(v, 0, 1, 0.001, 0.5),
+    });
+    autoFilter2.set({
+      frequency: scale(v, 0, 1, 0.005, 2),
+      // baseFrequency: scale(v, 0, 1, 4000, 16000),
+    });
   });
 };
