@@ -9,11 +9,9 @@ import { scale } from "./utils.js";
 export const createUi = () => {
   wind1GainDial = Nexus.Add.Dial("#instrument", {
     size: [100, 100],
-    value: 0.5, // just for debugging
   });
   wind2GainDial = Nexus.Add.Dial("#instrument", {
     size: [100, 100],
-    value: 0.5, // just for debugging
   });
   wind1FreqDial = Nexus.Add.Dial("#instrument", {
     size: [100, 100],
@@ -70,15 +68,7 @@ export const play = async () => {
   Tone.Transport.bpm.value = 70;
   Tone.Transport.start();
 
-  components = [
-    noise1,
-    noise2,
-    gain1,
-    gain2,
-    autoFilter1,
-    autoFilter2,
-    reverb,
-  ];
+  components = [noise1, noise2, gain1, gain2, autoFilter1, autoFilter2, reverb];
 
   // ui
   wind1GainDial.on("change", (v) => {
