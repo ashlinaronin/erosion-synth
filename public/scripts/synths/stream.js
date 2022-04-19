@@ -25,7 +25,7 @@ export const createUi = () => {
 export const dispose = () => {
   numVoicesSlider.destroy();
   numVoicesNumber.destroy();
-  painGainPosition.destroy();
+  panGainPosition.destroy();
   components.forEach((component) => component.dispose());
   streamVoices.forEach((voiceComponents) => {
     voiceComponents.forEach((component) => component.dispose());
