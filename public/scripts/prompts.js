@@ -34,8 +34,11 @@ export const showRandomPrompt = () => {
   }
 };
 
-export const showImage = (imageIndex) => {
+export const getImageSrc = (imageIndex) => {
   const adjustedIndex = (imageIndex + 1).toString().padStart(2, "0");
-  const imageSrc = `./images/geomorph_${adjustedIndex}.jpg`;
-  document.getElementById("score-image").src = imageSrc;
+  return `./images/geomorph_${adjustedIndex}.jpg`;
+};
+
+export const showImage = (imageIndex) => {
+  document.getElementById("score-image").src = getImageSrc(imageIndex);
 };
