@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <title>geomorph :: performer</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      main {
+        display: flex;
+        justify-content: center;
+      }
+
+      #instrument {
+        width: 400px;
+        height: 400px;
+      }
+
+      #score-image {
+        height: 400px;
+      }
+
+      aside {
+        display: flex;
+        margin: 16px;
+      }
+
+      aside > * {
+        width: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img
+        id="score-image"
+        src=""
+        alt="procedurally-generated landscape score"
+      />
+    </main>
+
+    <aside>
+      <div id="instrument">&nbsp;</div>
+      <div>
+        <h1 id="prompt-header">prompt</h2>
+        <p id="prompt-text">prompt will appear when timer starts.</p>
+      </div>
+    </aside>
+
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.68/Tone.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/nexusui@2.1.5/dist/NexusUI.min.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <script type="module">
+      import { showRandomPrompt, showImage,loadSynth } from "./scripts/prompts.js";
+      
+      // don't bother loading sockets if we are just running pure html for debugging
+      if (io) {
+        const socket = io();
+        socket.on("score.change", ({ imageIndex }) => {
+          console.log("received score.change, showing random prompt");
+          showImage(imageIndex);
+          showRandomPrompt();
+        });
+      }
+      
+
+      // if synth is specified in URL, load it (for debugging)
+      const queryParams = new URLSearchParams(window.location.search);
+      if (queryParams.has("synth")) {
+        await loadSynth(queryParams.get("synth"));
+      }
+
+      await StartAudioContext(Tone.context);
+    </script>
+  </body>
+</html>
