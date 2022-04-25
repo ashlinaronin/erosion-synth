@@ -8,7 +8,7 @@ const io = new Server(server);
 app.use(express.static("public"));
 
 let scoreChangeInterval;
-const totalImages = 8;
+const totalImages = 13;
 let imageIndex = 0;
 let totalIterations = 0;
 
