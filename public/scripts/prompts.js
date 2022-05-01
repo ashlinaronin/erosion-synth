@@ -39,6 +39,14 @@ export const getImageSrc = (imageIndex) => {
   return `./images/geomorph_${adjustedIndex}.jpg`;
 };
 
-export const showImage = (imageIndex) => {
-  document.getElementById("score-image").src = getImageSrc(imageIndex);
-};
+export const showImage = async (imageIndex) =>
+  new Promise((resolve) => {
+    const scoreImg = document.getElementById("score-image");
+    scoreImg.style.opacity = 0;
+    const timeout = setTimeout(() => {
+      scoreImg.src = getImageSrc(imageIndex);
+      scoreImg.style.opacity = 1;
+      clearTimeout(timeout);
+      resolve();
+    }, 1000);
+  });

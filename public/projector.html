@@ -16,8 +16,9 @@
         background-size: cover;
       }
 
-      #score-image {
-        height: 100%;
+      #score-background {
+        opacity: 1;
+        transition: opacity 1s;
       }
     </style>
   </head>
@@ -28,11 +29,16 @@
     <script type="module">
       import { getImageSrc } from "./scripts/prompts.js";
 
+      const scoreImg = document.getElementById("score-background");
+
       const socket = io();
       socket.on("score.change", ({ imageIndex }) => {
-        document.getElementById(
-          "score-background"
-        ).style.backgroundImage = `url(${getImageSrc(imageIndex)})`;
+        scoreImg.style.opacity = 0;
+        const timeout = setTimeout(() => {
+          scoreImg.style.backgroundImage = `url(${getImageSrc(imageIndex)})`;
+          scoreImg.style.opacity = 1;
+          clearTimeout(timeout);
+        }, 1000);
       });
     </script>
   </body>

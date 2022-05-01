@@ -18,6 +18,8 @@
 
       #score-image {
         height: 400px;
+        opacity: 1;
+        transition: opacity 1s;
       }
 
       aside {
@@ -70,9 +72,9 @@
       // don't bother loading sockets if we are just running pure html for debugging
       if (io) {
         const socket = io();
-        socket.on("score.change", ({ imageIndex }) => {
+        socket.on("score.change", async ({ imageIndex }) => {
           console.log("received score.change, showing random prompt");
-          showImage(imageIndex);
+          await showImage(imageIndex);
           showRandomPrompt();
         });
       }
