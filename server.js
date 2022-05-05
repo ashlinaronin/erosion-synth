@@ -11,11 +11,26 @@ let scoreChangeInterval;
 const totalImages = 13;
 let imageIndex = 0;
 let totalIterations = 0;
+let secondsElapsed = 0;
+let secondInterval;
 
 const incrementImageIndex = () => {
   imageIndex = (imageIndex + 1) % totalImages;
   totalIterations += 1;
 };
+
+const startSecondTimer = () => {
+  stopSecondTimer();
+  secondInterval = setInterval(() => {
+    secondsElapsed++;
+    io.emit("score.tick", ({ secondsElapsed }));
+  }, 1000);
+}
+
+const stopSecondTimer = () => {
+  secondsElapsed = 0;
+  clearInterval(secondInterval);
+}
 
 io.on("connection", (socket) => {
   console.log("a user connected");
@@ -26,6 +41,7 @@ io.on("connection", (socket) => {
   socket.on("score.start", ({ seconds }) => {
     // clear interval in case there is already one going
     totalIterations = 0;
+    startSecondTimer();
     clearInterval(scoreChangeInterval);
     incrementImageIndex();
 
@@ -38,6 +54,7 @@ io.on("connection", (socket) => {
         `${seconds}s passed, sending score.change for image ${imageIndex} to all clients`
       );
       incrementImageIndex();
+      secondsElapsed = 0;
       io.emit("score.change", { imageIndex, totalIterations, seconds });
     }, seconds * 1000);
   });

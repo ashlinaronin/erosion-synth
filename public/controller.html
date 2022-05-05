@@ -15,7 +15,8 @@
   <body>
     <main>
       <form id="controller">
-        <h1 id="iterations">Images shown: n/a</h1>
+        <h1 id="seconds-elapsed">Seconds elapsed</h1>
+        <h2 id="iterations">Images shown: n/a</h1>
         <label for="seconds">Seconds per image</label>
         <input type="number" required name="seconds" id="seconds" value="60" />
         <button type="submit">start timer</button>
@@ -27,6 +28,11 @@
     <script type="module">
       const socket = io();
 
+      let secondsElapsed = 0;
+      let secondInterval;
+
+
+
       document
         .querySelector("form#controller")
         .addEventListener("submit", (e) => {
@@ -34,13 +40,19 @@
 
           const seconds = document.getElementById("seconds").value;
           socket.emit("score.start", { seconds });
+          startSecondTimer();
         });
 
       document.querySelector("button#stop").addEventListener("click", (e) => {
         socket.emit("score.stop");
+        stopSecondTimer();
       });
 
-      socket.on("score.change", ({ totalIterations, seconds }) => {
+      socket.on("score.tick", ({secondsElapsed}) => {
+        document.getElementById("seconds-elapsed").innerText = `Seconds elapsed: ${secondsElapsed}`;
+      });
+
+      socket.on("score.change", ({ totalIterations, seconds, secondsElapsed }) => {
         document.getElementById(
           "iterations"
         ).innerText = `Images shown: ${totalIterations}`;
