@@ -7,7 +7,6 @@ const io = new Server(server);
 
 app.use(express.static("public"));
 
-let scoreChangeInterval;
 const totalImages = 13;
 let imageIndex = 0;
 let totalIterations = 0;
@@ -19,18 +18,32 @@ const incrementImageIndex = () => {
   totalIterations += 1;
 };
 
-const startSecondTimer = () => {
+const startSecondTimer = (secondsPerImage) => {
   stopSecondTimer();
+  io.emit("score.change", { imageIndex, totalIterations, secondsPerImage });
+  incrementImageIndex();
   secondInterval = setInterval(() => {
     secondsElapsed++;
-    io.emit("score.tick", ({ secondsElapsed }));
+    io.emit("score.tick", { secondsElapsed });
+    console.log("secondsElapsed", secondsElapsed);
+
+    if (secondsElapsed % secondsPerImage === 0) {
+      console.log(
+        `${secondsPerImage}s passed, sending score.change for image ${imageIndex} to all clients`
+      );
+      incrementImageIndex();
+      secondsElapsed = 0;
+      io.emit("score.change", { imageIndex, totalIterations, secondsPerImage });
+    }
   }, 1000);
-}
+};
 
 const stopSecondTimer = () => {
   secondsElapsed = 0;
+  totalIterations = 0;
+  imageIndex = 0;
   clearInterval(secondInterval);
-}
+};
 
 io.on("connection", (socket) => {
   console.log("a user connected");
@@ -38,31 +51,16 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
 
-  socket.on("score.start", ({ seconds }) => {
-    // clear interval in case there is already one going
-    totalIterations = 0;
-    startSecondTimer();
-    clearInterval(scoreChangeInterval);
-    incrementImageIndex();
-
+  socket.on("score.start", ({ secondsPerImage }) => {
     console.log(
-      `received score.start, starting timer for every ${seconds}s and sending initial score.change for image ${imageIndex}`
+      `received score.start for ${secondsPerImage}s, starting timer and sending initial score.change for image ${imageIndex}`
     );
-    io.emit("score.change", { imageIndex, totalIterations, seconds });
-    scoreChangeInterval = setInterval(() => {
-      console.log(
-        `${seconds}s passed, sending score.change for image ${imageIndex} to all clients`
-      );
-      incrementImageIndex();
-      secondsElapsed = 0;
-      io.emit("score.change", { imageIndex, totalIterations, seconds });
-    }, seconds * 1000);
+    startSecondTimer(secondsPerImage);
   });
 
   socket.on("score.stop", (msg) => {
     console.log("received score.stop, stopping timer");
-    clearInterval(scoreChangeInterval);
-    totalIterations = 0;
+    stopSecondTimer();
   });
 });
 
