@@ -50,3 +50,8 @@ export const showImage = async (imageIndex) =>
       resolve();
     }, 1000);
   });
+
+export const fadeOutImage = () => {
+  const scoreImg = document.getElementById("score-image");
+  scoreImg.style.opacity = 0;
+};

@@ -40,6 +40,10 @@
           clearTimeout(timeout);
         }, 1000);
       });
+
+      socket.on("score.stop", () => {
+        scoreImg.style.opacity = 0;
+      });
     </script>
   </body>
 </html>
