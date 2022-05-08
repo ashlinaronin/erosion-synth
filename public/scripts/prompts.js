@@ -1,5 +1,6 @@
 import prompts from "./prompts-data.js";
-import { TOTAL_IMAGES } from "../sharedConstants.js";
+
+const TOTAL_IMAGES = 13;
 
 let currentSynth = null;
 
@@ -56,19 +57,24 @@ const wait = async (ms) =>
   });
 
 export const showImage = async (imageIndex) => {
-  console.log("showImage");
-  const scoreImg = document.getElementById("score-image");
-  scoreImg.style.opacity = 0;
-  console.log("opacity set to 0");
+  const container = document.getElementById("score-image-container");
+  const [currentImage, nextImage] = container.getElementsByTagName("img");
+
+  nextImage.src = getImageSrc(imageIndex);
+  console.log("currentImageSrc", currentImage.src);
+  console.log("nextImageSrc", nextImage.src);
+
+  currentImage.style.opacity = 0;
+
   await wait(1000);
-  scoreImg.src = getImageSrc(imageIndex);
-  console.log("src set");
-  await wait(100);
-  scoreImg.style.opacity = 1;
-  console.log("opacity set to 1");
+  nextImage.style.opacity = 1;
+
+  // after fade, swap next w/ current so we're ready for the next transition
+  await wait(1200);
+  container.appendChild(currentImage);
 };
 
 export const fadeOutImage = () => {
-  const scoreImg = document.getElementById("score-image");
+  const scoreImg = document.getElementById("current-image");
   scoreImg.style.opacity = 0;
 };

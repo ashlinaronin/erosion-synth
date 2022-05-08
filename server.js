@@ -4,9 +4,10 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const { TOTAL_IMAGES } = require("./public/sharedConstants");
 
 app.use(express.static("public"));
+
+const TOTAL_IMAGES = 13;
 
 let imageIndex = 0;
 let totalIterations = 0;

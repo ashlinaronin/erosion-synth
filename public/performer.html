@@ -16,9 +16,15 @@
         height: 400px;
       }
 
-      #score-image {
+      #score-image-container {
+        position: relative;
         height: 400px;
-        opacity: 1;
+        width: 711.1px;
+      }
+
+      #score-image-container img {
+        position: absolute;
+        height: 400px;
         transition: opacity 1s;
       }
 
@@ -34,11 +40,10 @@
   </head>
   <body>
     <main>
-      <img
-        id="score-image"
-        src=""
-        alt="procedurally-generated landscape score"
-      />
+      <div id="score-image-container">
+        <img id="top" src="" alt="procedurally-generated landscape score">
+        <img id="bottom" src="" alt="procedurally-generated landscape score">
+      </div>
     </main>
 
     <aside>
