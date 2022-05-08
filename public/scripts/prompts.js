@@ -74,7 +74,13 @@ export const showImage = async (imageIndex) => {
   container.appendChild(currentImage);
 };
 
-export const fadeOutImage = () => {
-  const scoreImg = document.getElementById("current-image");
-  scoreImg.style.opacity = 0;
+export const fadeOutImage = async () => {
+  const currentImg = document.querySelector(
+    "#score-image-container img:first-of-type"
+  );
+  // update transition for fade out, then set it back after we're done
+  currentImg.style.transition = "opacity 4s";
+  currentImg.style.opacity = 0;
+  await wait(4000);
+  currentImg.style.transition = "opacity 1s";
 };

@@ -27,7 +27,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script type="module">
-      import { getImageSrc, preloadImages } from "./scripts/prompts.js";
+      import { getImageSrc, preloadImages, wait } from "./scripts/prompts.js";
 
       const scoreImg = document.getElementById("score-background");
 
@@ -43,8 +43,12 @@
         }, 1000);
       });
 
-      socket.on("score.stop", () => {
+      socket.on("score.stop", async () => {
+        // update transition for fade out, then set it back after we're done
+        scoreImg.style.transition = "opacity 4s";
         scoreImg.style.opacity = 0;
+        await wait(4000);
+        scoreImg.style.transition = "opacity 1s";
       });
     </script>
   </body>
