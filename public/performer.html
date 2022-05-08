@@ -76,7 +76,7 @@
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script type="module">
-      import { showRandomPrompt, showImage, fadeOutImage, preloadImages, loadSynth } from "./scripts/prompts.js";
+      import { showRandomPrompt, showImage, wait, fadeOutImage, preloadImages, loadSynth } from "./scripts/prompts.js";
       
       preloadImages();
 
@@ -85,7 +85,8 @@
         const socket = io();
         socket.on("score.change", async ({ imageIndex }) => {
           console.log("received score.change, showing random prompt");
-          await showImage(imageIndex);
+          showImage(imageIndex);
+          await wait(1000); // don't await showImage since we want to show the prompt before the fade transition is finished
           showRandomPrompt();
         });
 

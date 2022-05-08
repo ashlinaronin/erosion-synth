@@ -48,7 +48,7 @@ export const preloadImages = () => {
   }
 };
 
-const wait = async (ms) =>
+export const wait = async (ms) =>
   new Promise((resolve) => {
     const timeout = setTimeout(() => {
       resolve();
