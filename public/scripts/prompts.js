@@ -70,7 +70,7 @@ export const showImage = async (imageIndex) => {
   nextImage.style.opacity = 1;
 
   // after fade, swap next w/ current so we're ready for the next transition
-  await wait(1200);
+  await wait(1000);
   container.appendChild(currentImage);
 };
 
