@@ -67,8 +67,10 @@
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script type="module">
-      import { showRandomPrompt, showImage, fadeOutImage, loadSynth } from "./scripts/prompts.js";
+      import { showRandomPrompt, showImage, fadeOutImage, preloadImages, loadSynth } from "./scripts/prompts.js";
       
+      preloadImages();
+
       // don't bother loading sockets if we are just running pure html for debugging
       if (io) {
         const socket = io();

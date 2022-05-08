@@ -1,4 +1,5 @@
 import prompts from "./prompts-data.js";
+import { TOTAL_IMAGES } from "../sharedConstants.js";
 
 let currentSynth = null;
 
@@ -39,17 +40,33 @@ export const getImageSrc = (imageIndex) => {
   return `./images/geomorph_${adjustedIndex}.jpg`;
 };
 
-export const showImage = async (imageIndex) =>
+export const preloadImages = () => {
+  for (let i = 0; i < TOTAL_IMAGES; i++) {
+    const img = new Image();
+    img.src = getImageSrc(i);
+  }
+};
+
+const wait = async (ms) =>
   new Promise((resolve) => {
-    const scoreImg = document.getElementById("score-image");
-    scoreImg.style.opacity = 0;
     const timeout = setTimeout(() => {
-      scoreImg.src = getImageSrc(imageIndex);
-      scoreImg.style.opacity = 1;
-      clearTimeout(timeout);
       resolve();
-    }, 1000);
+      clearTimeout(timeout);
+    }, ms);
   });
+
+export const showImage = async (imageIndex) => {
+  console.log("showImage");
+  const scoreImg = document.getElementById("score-image");
+  scoreImg.style.opacity = 0;
+  console.log("opacity set to 0");
+  await wait(1000);
+  scoreImg.src = getImageSrc(imageIndex);
+  console.log("src set");
+  await wait(100);
+  scoreImg.style.opacity = 1;
+  console.log("opacity set to 1");
+};
 
 export const fadeOutImage = () => {
   const scoreImg = document.getElementById("score-image");

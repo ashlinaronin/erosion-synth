@@ -4,17 +4,17 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const { TOTAL_IMAGES } = require("./public/sharedConstants");
 
 app.use(express.static("public"));
 
-const totalImages = 13;
 let imageIndex = 0;
 let totalIterations = 0;
 let secondsElapsed = 0;
 let secondInterval;
 
 const incrementImageIndex = () => {
-  imageIndex = (imageIndex + 1) % totalImages;
+  imageIndex = (imageIndex + 1) % TOTAL_IMAGES;
   totalIterations += 1;
 };
 

@@ -27,9 +27,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script type="module">
-      import { getImageSrc } from "./scripts/prompts.js";
+      import { getImageSrc, preloadImages } from "./scripts/prompts.js";
 
       const scoreImg = document.getElementById("score-background");
+
+      preloadImages();
 
       const socket = io();
       socket.on("score.change", ({ imageIndex }) => {
