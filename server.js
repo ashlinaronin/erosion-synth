@@ -7,7 +7,7 @@ const io = new Server(server);
 
 app.use(express.static("public"));
 
-const TOTAL_IMAGES = 13;
+const TOTAL_IMAGES = 18;
 
 let imageIndex = 0;
 let totalIterations = 0;

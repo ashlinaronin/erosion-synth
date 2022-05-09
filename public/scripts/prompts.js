@@ -1,6 +1,6 @@
 import prompts from "./prompts-data.js";
 
-const TOTAL_IMAGES = 13;
+const TOTAL_IMAGES = 18;
 
 let currentSynth = null;
 
