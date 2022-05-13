@@ -15,26 +15,39 @@ let secondsElapsed = 0;
 let secondInterval;
 
 const incrementImageIndex = () => {
-  imageIndex = (imageIndex + 1) % TOTAL_IMAGES;
+  imageIndex += 1;
   totalIterations += 1;
 };
 
 const startSecondTimer = (secondsPerImage) => {
   stopSecondTimer();
+  totalIterations = 1;
   io.emit("score.change", { imageIndex, totalIterations, secondsPerImage });
-  incrementImageIndex();
+
+  // incrementImageIndex();
   secondInterval = setInterval(() => {
     secondsElapsed++;
     io.emit("score.tick", { secondsElapsed });
     console.log("secondsElapsed", secondsElapsed);
 
     if (secondsElapsed % secondsPerImage === 0) {
-      console.log(
-        `${secondsPerImage}s passed, sending score.change for image ${imageIndex} to all clients`
-      );
       incrementImageIndex();
-      secondsElapsed = 0;
-      io.emit("score.change", { imageIndex, totalIterations, secondsPerImage });
+
+      if (imageIndex === TOTAL_IMAGES) {
+        console.log("reached the last image, stopping timer");
+        stopSecondTimer();
+        io.emit("score.stop");
+      } else {
+        secondsElapsed = 0;
+        console.log(
+          `${secondsPerImage}s passed, sending score.change for image ${imageIndex} to all clients, totalIterations ${totalIterations}`
+        );
+        io.emit("score.change", {
+          imageIndex,
+          totalIterations,
+          secondsPerImage,
+        });
+      }
     }
   }, 1000);
 };
@@ -59,7 +72,7 @@ io.on("connection", (socket) => {
     startSecondTimer(secondsPerImage);
   });
 
-  socket.on("score.stop", (msg) => {
+  socket.on("score.stop", () => {
     console.log("received score.stop, stopping timer");
     stopSecondTimer();
     io.emit("score.stop");

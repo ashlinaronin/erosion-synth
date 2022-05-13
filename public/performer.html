@@ -45,15 +45,16 @@
   <body>
     <main>
       <div id="score-image-container">
-        <img id="top" src="" alt="procedurally-generated landscape score">
-        <img id="bottom" src="" alt="procedurally-generated landscape score">
+        <img id="top" src="" alt="procedurally-generated landscape score" />
+        <img id="bottom" src="" alt="procedurally-generated landscape score" />
       </div>
     </main>
 
     <aside>
       <div id="instrument">&nbsp;</div>
       <div>
-        <h1 id="prompt-header">prompt</h2>
+        <h1 id="seconds-elapsed">seconds elapsed</h1>
+        <h2 id="prompt-header">prompt</h2>
         <p id="prompt-text">prompt will appear when timer starts.</p>
       </div>
     </aside>
@@ -76,8 +77,15 @@
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script type="module">
-      import { showRandomPrompt, showImage, wait, fadeOutImage, preloadImages, loadSynth } from "./scripts/prompts.js";
-      
+      import {
+        showRandomPrompt,
+        showImage,
+        wait,
+        fadeOutImage,
+        preloadImages,
+        loadSynth,
+      } from "./scripts/prompts.js";
+
       preloadImages();
 
       // don't bother loading sockets if we are just running pure html for debugging
@@ -90,11 +98,17 @@
           showRandomPrompt();
         });
 
+        socket.on("score.tick", ({ secondsElapsed }) => {
+          document.getElementById(
+            "seconds-elapsed"
+          ).innerText = `seconds elapsed: ${secondsElapsed}`;
+        });
+
         socket.on("score.stop", () => {
           fadeOutImage();
+          document.getElementById("seconds-elapsed").innerText = "seconds elapsed";
         });
       }
-      
 
       // if synth is specified in URL, load it (for debugging)
       const queryParams = new URLSearchParams(window.location.search);
