@@ -24,16 +24,26 @@ const createSynth = () => {
   };
 
   const dispose = () => {
+    // destroy UI
     numVoicesSlider.destroy();
     numVoicesNumber.destroy();
     panGainPosition.destroy();
-    components.forEach((component) => component.dispose());
-    streamVoices.forEach((voiceComponents) => {
-      voiceComponents.forEach((component) => component.dispose());
-    });
-    streamVoices = [];
-    components = [];
     document.getElementById("instrument").replaceChildren();
+
+    // fade gain to 0 over 5 seconds
+    let gain = components[2]; // todo fancier
+    gain.gain.rampTo(0, 5);
+
+    // after 5 seconds (plus a little buffer), clean up all the sound pieces
+    const fadeOut = setTimeout(() => {
+      components.forEach((component) => component.dispose());
+      streamVoices.forEach((voiceComponents) => {
+        voiceComponents.forEach((component) => component.dispose());
+      });
+      streamVoices = [];
+      components = [];
+      clearTimeout(fadeOut);
+    }, 5200);
   };
 
   const createVoice = (lfoFrequency, baseFilterFrequency) => {

@@ -23,13 +23,26 @@ const createSynth = () => {
   };
 
   const dispose = () => {
+    // destroy ui
     wind1GainDial.destroy();
     wind2GainDial.destroy();
     wind1FreqDial.destroy();
     wind2FreqDial.destroy();
-    components.forEach((component) => component.dispose());
-    components = [];
     document.getElementById("instrument").replaceChildren();
+
+    // fade both gains to 0 over 5 seconds
+    const gain1 = components[2]; // todo fancier
+    const gain2 = components[3];
+
+    gain1.gain.rampTo(0, 5);
+    gain2.gain.rampTo(0, 5);
+
+    // after 5 seconds (plus a little buffer), clean up all the sound pieces
+    const fadeOut = setTimeout(() => {
+      components.forEach((component) => component.dispose());
+      components = [];
+      clearTimeout(fadeOut);
+    }, 5200);
   };
 
   const play = () => {
