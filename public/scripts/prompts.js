@@ -10,9 +10,11 @@ const getRandomPrompt = () =>
 export const loadSynth = async (synthName) => {
   currentSynth?.dispose();
   currentSynth = null;
-  currentSynth = await import(`./synths/${synthName}.js`);
-  await currentSynth.createUi();
-  await currentSynth.play();
+
+  let synthConstructor = (await import(`./synths/${synthName}.js`)).default;
+  currentSynth = synthConstructor();
+  currentSynth.createUi();
+  currentSynth.play();
 };
 
 export const showRandomPrompt = () => {
