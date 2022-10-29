@@ -48,35 +48,5 @@ export default [
     type: "ice",
     speed: "fast",
     text: "You are an iceberg that has suddenly calved from a glacier. Introduce some propulsive energy to the rhythm.",
-  },
-  {
-    type: "none",
-    speed: "n/a",
-    text: "Just listen.",
-  },
-  {
-    type: "none",
-    speed: "n/a",
-    text: "Just listen.",
-  },
-  {
-    type: "none",
-    speed: "n/a",
-    text: "Just listen.",
-  },
-  {
-    type: "none",
-    speed: "n/a",
-    text: "Just listen.",
-  },
-  {
-    type: "none",
-    speed: "n/a",
-    text: "Just listen.",
-  },
-  {
-    type: "none",
-    speed: "n/a",
-    text: "Just listen.",
-  },
+  }
 ];
