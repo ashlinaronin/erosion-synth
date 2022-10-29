@@ -1,5 +1,5 @@
 import prompts from "./prompts-data.js";
-import IMAGE_SEQUENCE from "./image-sequence";
+import IMAGE_SEQUENCE from "./image-sequence.mjs";
 
 let currentSynth = null;
 
@@ -42,7 +42,7 @@ export const showRandomPrompt = () => {
 export const getImageSrc = (imageIndex) => {
   const sequenceImageIndex = IMAGE_SEQUENCE[imageIndex];
 
-  const adjustedIndex = (sequenceImageIndex + 1).toString().padStart(2, "0");
+  const adjustedIndex = sequenceImageIndex.toString().padStart(2, "0");
   return `./images/geomorph_${adjustedIndex}.jpg`;
 };
 

@@ -1,10 +1,12 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const http = require("http");
+// const http = require("http");
+import http from "http";
 const server = http.createServer(app);
-const { Server } = require("socket.io");
+// const { Server } = require("socket.io");
+import {Server} from "socket.io";
 const io = new Server(server);
-const IMAGE_SEQUENCE = require("./public/scripts/image-sequence");
+import IMAGE_SEQUENCE from "./public/scripts/image-sequence.mjs";
 
 app.use(express.static("public"));
 
