@@ -1,6 +1,5 @@
 import prompts from "./prompts-data.js";
-
-const TOTAL_IMAGES = 18;
+import IMAGE_SEQUENCE from "./image-sequence";
 
 let currentSynth = null;
 
@@ -38,13 +37,17 @@ export const showRandomPrompt = () => {
   }
 };
 
+// based on the provided IMAGE_SEQUENCE and which image we're on,
+// find the appropriate image file src
 export const getImageSrc = (imageIndex) => {
-  const adjustedIndex = (imageIndex + 1).toString().padStart(2, "0");
+  const sequenceImageIndex = IMAGE_SEQUENCE[imageIndex];
+
+  const adjustedIndex = (sequenceImageIndex + 1).toString().padStart(2, "0");
   return `./images/geomorph_${adjustedIndex}.jpg`;
 };
 
 export const preloadImages = () => {
-  for (let i = 0; i < TOTAL_IMAGES; i++) {
+  for (let i = 0; i < IMAGE_SEQUENCE.length; i++) {
     const img = new Image();
     img.src = getImageSrc(i);
   }

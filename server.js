@@ -4,10 +4,9 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const IMAGE_SEQUENCE = require("./public/scripts/image-sequence");
 
 app.use(express.static("public"));
-
-const TOTAL_IMAGES = 18;
 
 let imageIndex = 0;
 let totalIterations = 0;
@@ -33,7 +32,7 @@ const startSecondTimer = (secondsPerImage) => {
     if (secondsElapsed % secondsPerImage === 0) {
       incrementImageIndex();
 
-      if (imageIndex === TOTAL_IMAGES) {
+      if (imageIndex === IMAGE_SEQUENCE.length) {
         console.log("reached the last image, stopping timer");
         stopSecondTimer();
         io.emit("score.stop");
