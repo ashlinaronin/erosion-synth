@@ -21,27 +21,27 @@ const createSynth = () => {
     // instantiate objects
     const oscillator1 = new Tone.FMOscillator({
       frequency: 100,
-      detune: -3,
+      detune: -5,
       type: "square",
-      modulationType: "square",
+      modulationType: "sine",
       harmonicity: 0.6,
-      modulationIndex: 13,
-      volume: -12,
+      modulationIndex: 8,
+      volume: -16,
     }).start();
     const oscillator2 = new Tone.FMOscillator({
       frequency: 100,
-      detune: 3,
+      detune: 5,
       type: "triangle",
       modulationType: "sine",
-      harmonicity: 6,
-      modulationIndex: 8,
-      volume: -12,
+      harmonicity: 0.9,
+      modulationIndex: 13,
+      volume: -16,
     }).start();
     const ampEnv = new Tone.AmplitudeEnvelope({
       attack: 0.01,
-      decay: 0.5,
-      sustain: 0.7,
-      release: 0.8,
+      decay: 0.01,
+      sustain: 0.1,
+      release: 0.01,
     });
     const freqEnv = new Tone.FrequencyEnvelope({
       attack: 0.01,
@@ -49,7 +49,7 @@ const createSynth = () => {
       octaves: 2,
       exponent: 3.5,
     });
-    const filter = new Tone.Filter(3000, "lowpass");
+    const filter = new Tone.Filter(1800, "lowpass");
 
     const reverb = new Tone.Reverb({
       decay: 0.7,
@@ -57,7 +57,7 @@ const createSynth = () => {
       wet: 0.4,
     });
 
-    const distortion = new Tone.Distortion(0.25);
+    const distortion = new Tone.Distortion(0.15);
 
     // connect objects
     oscillator1.connect(ampEnv);
@@ -76,7 +76,7 @@ const createSynth = () => {
     // ui
     const debouncedXyHandler = _.debounce(({ x, y }) => {
       console.log(x, y);
-      const freq = scale(x, 0, 1, 40, 100);
+      const freq = scale(x, 0, 1, 40, 160);
       const dist = scale(y, 0, 1, 0.3, 1);
       const decay = scale(y, 0, 1, 0, 2);
       const release = scale(y, 0, 1, 0, 3);
@@ -86,7 +86,7 @@ const createSynth = () => {
       ampEnv.release = release;
       freqEnv.baseFrequency = freq;
       distortion.distortion = dist;
-      ampEnv.triggerAttackRelease("16n");
+      ampEnv.triggerAttackRelease("32n");
       freqEnv.triggerAttack();
     }, 10);
 
